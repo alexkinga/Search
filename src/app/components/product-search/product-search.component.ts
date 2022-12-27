@@ -20,7 +20,12 @@ export class ProductSearchComponent {
     this._productService.getAll(),
   this.startsWith$,
   ]).pipe(
-    map(([products, startsWith]) => products.filter(product => product.title.startsWith(startsWith)))
+    map(([products, startsWith]) => {
+      if (!startsWith) {
+        return [];
+      }
+      return products.filter(product => product.title.startsWith(startsWith))
+    })
   );
 
   constructor(private _productService: ProductService) {

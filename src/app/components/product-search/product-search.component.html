@@ -17,9 +17,12 @@
 </mat-card>
 <mat-card>
   <mat-card-title>Products</mat-card-title>
-  <mat-card-content>
-    <mat-list role="list">
-      <mat-list-item role="listitem" *ngFor="let item of list$ | async">{{item.title}}</mat-list-item>
+  <mat-card-content *ngIf="list$ | async as list">
+    <mat-list role="list" *ngIf="list.length > 0 else emptyState">
+      <mat-list-item role="listitem" *ngFor="let item of list$ | async">{{item.title}} {{item.price}}</mat-list-item>
     </mat-list>
+    <ng-template #emptyState>
+      Oops! There is no data!
+    </ng-template>
   </mat-card-content>
 </mat-card>
