@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
-import { ProductModel } from '../../models/product.model';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { ProductService } from '../../services/product.service';
+import {ProductModel} from "../../models/product.model";
 
 @Component({
   selector: 'app-product-search',
@@ -15,18 +16,8 @@ export class ProductSearchComponent {
   readonly search: FormGroup = new FormGroup({ title: new FormControl() });
   private _startsWithSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   public startsWith$: Observable<string> = this._startsWithSubject.asObservable();
+  readonly list$: Observable<ProductModel[]> = this.startsWith$.pipe(switchMap(data => this._productService.getAll(data)));
 
-  readonly list$: Observable<ProductModel[]> = combineLatest([
-    this._productService.getAll(),
-  this.startsWith$,
-  ]).pipe(
-    map(([products, startsWith]) => {
-      if (!startsWith) {
-        return [];
-      }
-      return products.filter(product => product.title.startsWith(startsWith))
-    })
-  );
 
   constructor(private _productService: ProductService) {
   }

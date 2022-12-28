@@ -1,0 +1,12 @@
+<mat-card>
+  <mat-card-title>Universities</mat-card-title>
+  <mat-card-content>
+    <mat-form-field appearance="fill">
+      <mat-label>Write a country</mat-label>
+      <input matInput [formControl]="search">
+      </mat-form-field>
+      <mat-list role="list">
+        <mat-list-item role="listitem" *ngFor="let item of universities$ | async">{{item.name}} {{item.country}}</mat-list-item>
+      </mat-list>
+  </mat-card-content>
+</mat-card>
